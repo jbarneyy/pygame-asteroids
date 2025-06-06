@@ -2,8 +2,16 @@ import pygame
 import player
 import asteroid as ast
 import asteroidfield
+import shot
 import sys
 from constants import *
+
+
+updatable = pygame.sprite.Group()
+drawable = pygame.sprite.Group()
+asteroids = pygame.sprite.Group()
+shots = pygame.sprite.Group()
+
 
 def main():
     print("Starting Asteroids!")
@@ -13,16 +21,14 @@ def main():
     
     pygame.init()
 
-    updatable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
-    asteroids = pygame.sprite.Group()
 
     asteroidfield.AsteroidField.containers = (updatable)
     ast.Asteroid.containers = (updatable, drawable, asteroids)
     player.Player.containers = (updatable, drawable)
+    shot.Shot.containers = (updatable, drawable, shots)
 
     SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    PLAYER = player.Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    PLAYER = player.Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, shots)
     ASTEROIDFIELD = asteroidfield.AsteroidField()
 
     game_clock = pygame.time.Clock()

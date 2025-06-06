@@ -9,6 +9,11 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
     
     pygame.init()
+
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    player.Player.containers = (updatable, drawable)
+
     SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     PLAYER = player.Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
@@ -26,8 +31,12 @@ def main():
         
         SCREEN.fill("black")
 
-        PLAYER.update(dt)
-        PLAYER.draw(SCREEN)
+        # PLAYER.update(dt)
+        # PLAYER.draw(SCREEN)
+
+        updatable.update(dt)
+        for sprite in drawable:
+            sprite.draw(SCREEN)
         
 
 

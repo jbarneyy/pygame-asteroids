@@ -54,6 +54,11 @@ def main():
                 print("Game over!")
                 sys.exit()
 
+            for pew in shots:
+                if asteroid.detect_collision(pew):
+                    asteroid.split()
+                    pew.kill()
+
 
         # Pygame/Display module method for refreshing screen.
         pygame.display.flip()

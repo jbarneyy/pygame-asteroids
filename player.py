@@ -48,10 +48,26 @@ class Player(circleshape.CircleShape):
             self.rotate(dt)
         if keys[pygame.K_w]:
             self.move(dt)
+            self.velocity = pygame.Vector2(0, 1).rotate(self.rotation)
         if keys[pygame.K_s]:
             self.move(dt * -1)
+            self.velocity = pygame.Vector2(0, -1).rotate(self.rotation)
         if keys[pygame.K_SPACE]:
             self.shoot()
+
+        self.position += self.velocity
+
+
+        # For wrapping player to opposite side when going off screen.
+        if (self.position.x >= SCREEN_WIDTH):
+            self.position.x = 0.01
+        if (self.position.x <= 0):
+            self.position.x = SCREEN_WIDTH - 0.01
+
+        if (self.position.y >= SCREEN_HEIGHT):
+            self.position.y = 0.01
+        if (self.position.y <= 0):
+            self.position.y = SCREEN_HEIGHT - 0.01
             
     
     def move(self, dt):

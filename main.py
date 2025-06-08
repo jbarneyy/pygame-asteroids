@@ -3,7 +3,10 @@ import player
 import asteroid as ast
 import asteroidfield
 import shot
+import stars
 import sys
+import circleshape
+import random
 from constants import *
 
 
@@ -26,13 +29,23 @@ def main():
     ast.Asteroid.containers = (updatable, drawable, asteroids)
     player.Player.containers = (updatable, drawable)
     shot.Shot.containers = (updatable, drawable, shots)
+    stars.Stars.containers = (updatable, drawable)
+    circleshape.CircleShape.containers = (drawable)
+    
 
     SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     PLAYER = player.Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, shots)
+    STARS = stars.Stars()
     ASTEROIDFIELD = asteroidfield.AsteroidField()
+
+    # for i in range(0, MAX_STARS):
+    #    STARS.append(stars.Star(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT), 1))
+        
 
     game_clock = pygame.time.Clock()
     dt = 0
+    game_score = 0
+    star_expiration = 0
 
 
     while True:
@@ -46,18 +59,34 @@ def main():
         SCREEN.fill("black")
 
         updatable.update(dt)
+
         for sprite in drawable:
             sprite.draw(SCREEN)
         
         for asteroid in asteroids:
             if asteroid.detect_collision(PLAYER):
-                print("Game over!")
+                print(f"Game over! Your score was: {game_score}")
                 sys.exit()
 
             for pew in shots:
                 if asteroid.detect_collision(pew):
+                    if asteroid.radius <= ASTEROID_MIN_RADIUS:
+                        game_score += 1
+
                     asteroid.split()
                     pew.kill()
+
+            star_expiration += 1
+            
+            if (star_expiration >= 3000):
+                star_expiration = 0
+
+                random.choice(STARS.current_stars).kill()
+                random.choice(STARS.current_stars).kill()
+                
+                STARS.current_stars.append(circleshape.CircleShape(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT), 1))
+                STARS.current_stars.append(circleshape.CircleShape(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT), 1))
+                
 
 
         # Pygame/Display module method for refreshing screen.

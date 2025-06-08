@@ -18,7 +18,7 @@ class CircleShape(pygame.sprite.Sprite):
 
     def draw(self, screen):
         # sub-classes must override
-        pass
+        pygame.draw.circle(screen, "white", self.position, self.radius, 2)
 
 
     def update(self, dt):
